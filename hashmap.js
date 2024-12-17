@@ -2,39 +2,37 @@ function HashMap () {
   // const LOAD_FACTOR = 0.8
   const capacity = 16
   let buckets = new Array(capacity).fill([])
-  let entries = 0
+  let length = 0
 
   function hash (key) {
-    let hash = 0;
-    
-    for (let i = 0; i < this.length; i++) {
-      let character = this.charCodeAt(i);
-      hash = ((hash << 5) - hash) + character;
-      hash |= 0;
+    let hash = 0
+
+    for (let i = 0; i < key.length; i++) {
+      const character = key.charCodeAt(i)
+      hash = ((hash << 5) - hash) + character
+      hash |= 0
+      hash = hash % capacity
     }
 
-    return hash % capacity;
+    return hash
   }
 
   function set (key, value) {
     const index = hash(key)
+
     if (index < 0 || index >= buckets.length) {
       throw new Error('Trying to access index out of bounds')
     }
 
-    const obj = {
-      key,
-      value
-    }
-    
     const keyIsTaken = buckets[index].filter(element => element.key === key).length !== 0
 
     if (keyIsTaken) {
       _remove(key, index)
     }
-    
-    buckets[index].push(obj)
-    entries++
+
+    buckets[index] = buckets[index].concat([{ key, value }])
+
+    length++
   }
 
   function get (key) {
@@ -62,7 +60,7 @@ function HashMap () {
 
     buckets[bucketIndex] = buckets[bucketIndex].splice(listIndex, 1)
 
-    entries--
+    length--
   }
 
   function remove (key) {
@@ -83,7 +81,9 @@ function HashMap () {
     buckets = new Array(capacity).fill([])
   }
 
-  const length = () => entries
+  const entries = () => buckets.flat().map(obj => [obj.key, obj.value])
+  // const keys = () => buckets.flat().map(obj => obj.key);
+  // const values = () => buckets.flat().map(obj => obj.value);
 
   return {
     get,
@@ -91,31 +91,20 @@ function HashMap () {
     has,
     remove,
     length,
-    clear
+    clear,
+    entries
+    // keys,
+    // values
   }
 }
 
-function _getEntries () {
-  let array = [];
-  for (bucket of buckets) {
-    array.concat(bucket);
-  }
-
-  return array;
-}
-
-function entries () {
-  return _getEntries()
-}
 const data = HashMap()
 data.set('thing', 'awesome')
-data.set('thing1', 'awesome')
-data.set('thing2', 'awesome')
-data.set('thing3', 'awesome')
-data.set('thing4', 'awesome')
-data.set('thing5', 'awesome')
-data.set('thing6', 'awesome')
-data.set('thing7', 'awesome')
-data.set('thing8', 'awesome')
-console.log(data.get('thing'))
-console.log(data.length());
+data.set('asdf', 'awesome')
+data.set('d', 'awesome')
+data.set('sdfawe', 'awesome')
+data.set('yui', 'awesome')
+data.set('dsgat', 'awesome')
+data.set('jhg', 'awesome')
+data.set('vb', 'awesome')
+console.log(data.entries())
