@@ -5,11 +5,15 @@ function HashMap () {
   let entries = 0
 
   function hash (key) {
-    let hashCode = 0
+    let hash = 0;
+    
+    for (let i = 0; i < this.length; i++) {
+      let character = this.charCodeAt(i);
+      hash = ((hash << 5) - hash) + character;
+      hash |= 0;
+    }
 
-    hashCode = key.charCodeAt(0) % capacity
-
-    return hashCode
+    return hash % capacity;
   }
 
   function set (key, value) {
@@ -91,7 +95,27 @@ function HashMap () {
   }
 }
 
+function _getEntries () {
+  let array = [];
+  for (bucket of buckets) {
+    array.concat(bucket);
+  }
+
+  return array;
+}
+
+function entries () {
+  return _getEntries()
+}
 const data = HashMap()
 data.set('thing', 'awesome')
+data.set('thing1', 'awesome')
+data.set('thing2', 'awesome')
+data.set('thing3', 'awesome')
+data.set('thing4', 'awesome')
+data.set('thing5', 'awesome')
+data.set('thing6', 'awesome')
+data.set('thing7', 'awesome')
+data.set('thing8', 'awesome')
 console.log(data.get('thing'))
 console.log(data.length());
