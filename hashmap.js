@@ -1,7 +1,7 @@
 function HashMap () {
   // const LOAD_FACTOR = 0.8
   const capacity = 16
-  const buckets = new Array(capacity).fill([])
+  let buckets = new Array(capacity).fill([])
   let entries = 0
 
   function hash (key) {
@@ -75,13 +75,19 @@ function HashMap () {
     return buckets[index].find(obj => obj.key === key) !== undefined
   }
 
+  function clear () {
+    buckets = new Array(capacity).fill([])
+  }
+
   const length = () => entries
 
   return {
     get,
     set,
     has,
-    remove
+    remove,
+    length,
+    clear
   }
 }
 
