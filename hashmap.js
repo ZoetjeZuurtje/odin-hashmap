@@ -81,9 +81,10 @@ function HashMap () {
     buckets = new Array(capacity).fill([])
   }
 
-  const entries = () => buckets.flat().map(obj => [obj.key, obj.value])
-  const keys = () => buckets.flat().map(obj => obj.key);
-  const values = () => buckets.flat().map(obj => obj.value);
+  const _entries = () => buckets.flat()
+  const entries = () => _entries().map(obj => [obj.key, obj.value])
+  const values = () => _entries().map(obj => obj.value)
+  const keys = () => _entries().map(obj => obj.key)
 
   return {
     get,
@@ -93,8 +94,8 @@ function HashMap () {
     length,
     clear,
     entries,
-    keys,
-    values
+    values,
+    keys
   }
 }
 
