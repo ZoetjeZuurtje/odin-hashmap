@@ -22,14 +22,14 @@ function HashMap () {
       key,
       value
     }
-    buckets[index].push(obj)
-
+    
     const keyIsTaken = buckets[index].filter(element => element.key === key).length !== 0
+
     if (keyIsTaken) {
       _remove(key, index)
     }
-
-    buckets[index].push(key)
+    
+    buckets[index].push(obj)
     entries++
   }
 
@@ -75,6 +75,8 @@ function HashMap () {
     return buckets[index].find(obj => obj.key === key) !== undefined
   }
 
+  const length = () => entries
+
   return {
     get,
     set,
@@ -86,3 +88,4 @@ function HashMap () {
 const data = HashMap()
 data.set('thing', 'awesome')
 console.log(data.get('thing'))
+console.log(data.length());
