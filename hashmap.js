@@ -82,7 +82,7 @@ function HashMap () {
   }
 
   const entries = () => buckets.flat().map(obj => [obj.key, obj.value])
-  // const keys = () => buckets.flat().map(obj => obj.key);
+  const keys = () => buckets.flat().map(obj => obj.key);
   // const values = () => buckets.flat().map(obj => obj.value);
 
   return {
@@ -92,8 +92,8 @@ function HashMap () {
     remove,
     length,
     clear,
-    entries
-    // keys,
+    entries,
+    keys,
     // values
   }
 }
@@ -107,4 +107,4 @@ data.set('yui', 'awesome')
 data.set('dsgat', 'awesome')
 data.set('jhg', 'awesome')
 data.set('vb', 'awesome')
-console.log(data.entries())
+console.log(data.keys())
