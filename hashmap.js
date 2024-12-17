@@ -24,13 +24,10 @@ function HashMap () {
       throw new Error('Trying to access index out of bounds')
     }
 
-    const keyIsTaken = buckets[index].filter(element => element.key === key).length !== 0
+    const keyIsTaken = buckets[index].find(obj => obj.key === key) !== undefined
 
-    if (keyIsTaken) {
-      _remove(key, index)
-    }
-
-    buckets[index] = buckets[index].concat([{ key, value }])
+    buckets[index] = [{ key, value }].concat(buckets[index])
+    if (keyIsTaken) _remove(key, index)
 
     length++
   }
@@ -53,13 +50,14 @@ function HashMap () {
   }
 
   function _remove (key, bucketIndex) {
-    const listIndex = buckets[bucketIndex].indexOf(key)
+    const objectToFind = buckets[bucketIndex].find(obj => obj.key === key)
+    const listIndex = buckets[bucketIndex].indexOf(objectToFind)
+
     if (listIndex === -1) {
       throw new Error('Key not found in specified bucket')
     }
 
     buckets[bucketIndex] = buckets[bucketIndex].splice(listIndex, 1)
-
     length--
   }
 
@@ -100,12 +98,12 @@ function HashMap () {
 }
 
 const data = HashMap()
-data.set('thing', 'awesome')
+data.set('thing', 'old')
 data.set('asdf', 'awesome')
 data.set('d', 'awesome')
 data.set('sdfawe', 'awesome')
 data.set('yui', 'awesome')
 data.set('dsgat', 'awesome')
 data.set('jhg', 'awesome')
-data.set('vb', 'awesome')
-console.log(data.values())
+data.set('thing', 'new')
+data.set('thing', 'new4')
