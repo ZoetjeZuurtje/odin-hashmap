@@ -2,7 +2,7 @@ function HashMap () {
   const MAX_LOAD_FACTOR = 0.8
   let capacity = 16
   let buckets = new Array(capacity).fill(null).map(() => [])
-  let length = 0
+  let _length = 0
 
   function hash (key) {
     let hash = 0
@@ -32,7 +32,7 @@ function HashMap () {
     }
     buckets[index].push({ key, value })
 
-    length++
+    _length++
   }
 
   function get (key) {
@@ -58,7 +58,7 @@ function HashMap () {
     }
 
     buckets[bucketIndex].splice(listIndex, 1)
-    length--
+    _length--
   }
 
   function remove (key) {
@@ -77,6 +77,7 @@ function HashMap () {
   }
 
   function clear () {
+    _length = 0
     buckets = new Array(capacity).fill(null).map(() => [])
   }
 
@@ -87,7 +88,7 @@ function HashMap () {
   }
 
   function isOverloaded () {
-    return capacity * MAX_LOAD_FACTOR < length 
+    return capacity * MAX_LOAD_FACTOR < _length 
   }
 
   function increaseCapacity () {
@@ -108,6 +109,7 @@ function HashMap () {
   const entries = () => _entries().map(obj => [obj.key, obj.value])
   const values = () => _entries().map(obj => obj.value)
   const keys = () => _entries().map(obj => obj.key)
+  const length = () => _length
 
   return {
     get,
@@ -123,7 +125,8 @@ function HashMap () {
 }
 
 const data = HashMap()
-for (let i = 0; i < 100; i++) {
-  const key = Math.floor(Math.random() * 10000).toString()
+for (let i = 0; i < 1e6; i++) {
+  const key = Math.floor(Math.random() * 1e6).toString()
   data.set(key, 'value')
 }
+console.log(data.length(), data.entries().length)
