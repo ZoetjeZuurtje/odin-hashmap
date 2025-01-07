@@ -1,7 +1,7 @@
 function HashMap () {
   // const LOAD_FACTOR = 0.8
   const capacity = 16
-  let buckets = new Array(capacity).fill([])
+  let buckets = new Array(capacity).fill(null).map(() => [])
   let length = 0
 
   function hash (key) {
@@ -24,11 +24,12 @@ function HashMap () {
       throw new Error('Trying to access index out of bounds')
     }
 
-    const keyIsTaken = buckets[index].find(obj => obj.key === key) !== undefined
-
-    buckets[index] = [{ key, value }].concat(buckets[index])
-    if (keyIsTaken) _remove(key, index)
-
+    const objectWithKey = _findObjectInBucket(key, index);
+    if (objectWithKey !== undefined) {
+      _remove(objectWithKey, index)
+    }
+    buckets[index].push({ key, value })
+    
     length++
   }
 
@@ -38,32 +39,30 @@ function HashMap () {
       throw new Error('Trying to access index out of bounds')
     }
 
-    const item = buckets[index]
-      .filter(element => element.key === key)
-      .at(0)
+    const object = _findObjectInBucket(key, object);
 
-    if (item === undefined) {
+    if (object === undefined) {
       return null
     } else {
-      return item.value
+      return object.value
     }
   }
 
-  function _remove (key, bucketIndex) {
-    const objectToFind = buckets[bucketIndex].find(obj => obj.key === key)
-    const listIndex = buckets[bucketIndex].indexOf(objectToFind)
+  function _remove (object, bucketIndex) {
+    const listIndex = buckets[bucketIndex].indexOf(object)
 
     if (listIndex === -1) {
       throw new Error('Key not found in specified bucket')
     }
 
-    buckets[bucketIndex] = buckets[bucketIndex].splice(listIndex, 1)
+    buckets[bucketIndex].splice(listIndex, 1)
     length--
   }
 
   function remove (key) {
     const index = hash(key)
-    _remove(key, index)
+    const object = _findObjectInBucket(key, index)
+    _remove(object, index)
   }
 
   function has (key) {
@@ -79,6 +78,7 @@ function HashMap () {
     buckets = new Array(capacity).fill([])
   }
 
+  const _findObjectInBucket = (key, index) => buckets[index].filter(obj => obj.key === key).at(0)
   const _entries = () => buckets.flat()
   const entries = () => _entries().map(obj => [obj.key, obj.value])
   const values = () => _entries().map(obj => obj.value)
@@ -93,7 +93,8 @@ function HashMap () {
     clear,
     entries,
     values,
-    keys
+    keys,
+    buckets
   }
 }
 
@@ -106,4 +107,4 @@ data.set('yui', 'awesome')
 data.set('dsgat', 'awesome')
 data.set('jhg', 'awesome')
 data.set('thing', 'new')
-data.set('thing', 'new4')
+console.log(data.entries());
