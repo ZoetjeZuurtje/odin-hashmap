@@ -39,7 +39,7 @@ function HashMap () {
       throw new Error('Trying to access index out of bounds')
     }
 
-    const object = _findObjectInBucket(key, object)
+    const object = _findObjectInBucket(key, index)
 
     if (object === undefined) {
       return null
@@ -105,6 +105,6 @@ data.set('d', 'awesome')
 data.set('sdfawe', 'awesome')
 data.set('yui', 'awesome')
 data.set('dsgat', 'awesome')
-data.set('jhg', 'awesome')
+console.log(data.get('dsgat'))
 data.set('thing', 'new')
 console.log(data.entries())
