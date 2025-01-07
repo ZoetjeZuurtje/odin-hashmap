@@ -1,6 +1,6 @@
 function HashMap () {
-  // const LOAD_FACTOR = 0.8
-  const capacity = 16
+  const MAX_LOAD_FACTOR = 0.8
+  let capacity = 16
   let buckets = new Array(capacity).fill(null).map(() => [])
   let length = 0
 
@@ -18,6 +18,8 @@ function HashMap () {
   }
 
   function set (key, value) {
+    manageCapacity()
+    
     const index = hash(key)
 
     if (index < 0 || index >= buckets.length) {
@@ -78,6 +80,29 @@ function HashMap () {
     buckets = new Array(capacity).fill(null).map(() => [])
   }
 
+  function manageCapacity () {
+    if (isOverloaded()) {
+      increaseCapacity()
+    }
+  }
+
+  function isOverloaded () {
+    return capacity * MAX_LOAD_FACTOR < length 
+  }
+
+  function increaseCapacity () {
+    capacity = capacity * 2
+    let objects = _entries().map(obj => {
+      let entries = Object.entries(obj)
+      return [entries[0][1], entries[1][1]]
+    });
+    clear()
+
+    for (let i = 0; i < objects.length; i++) {
+      set(objects[i][0], objects[i][1])
+    }
+  }
+
   const _findObjectInBucket = (key, index) => buckets[index].filter(obj => obj.key === key).at(0)
   const _entries = () => buckets.flat()
   const entries = () => _entries().map(obj => [obj.key, obj.value])
@@ -93,18 +118,12 @@ function HashMap () {
     clear,
     entries,
     values,
-    keys,
-    buckets
+    keys
   }
 }
 
 const data = HashMap()
-data.set('thing', 'old')
-data.set('asdf', 'awesome')
-data.set('d', 'awesome')
-data.set('sdfawe', 'awesome')
-data.set('yui', 'awesome')
-data.set('dsgat', 'awesome')
-console.log(data.get('dsgat'))
-data.set('thing', 'new')
-console.log(data.entries())
+for (let i = 0; i < 100; i++) {
+  const key = Math.floor(Math.random() * 10000).toString()
+  data.set(key, 'value')
+}
