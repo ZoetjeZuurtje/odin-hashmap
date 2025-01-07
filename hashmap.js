@@ -24,12 +24,12 @@ function HashMap () {
       throw new Error('Trying to access index out of bounds')
     }
 
-    const objectWithKey = _findObjectInBucket(key, index);
+    const objectWithKey = _findObjectInBucket(key, index)
     if (objectWithKey !== undefined) {
       _remove(objectWithKey, index)
     }
     buckets[index].push({ key, value })
-    
+
     length++
   }
 
@@ -39,7 +39,7 @@ function HashMap () {
       throw new Error('Trying to access index out of bounds')
     }
 
-    const object = _findObjectInBucket(key, object);
+    const object = _findObjectInBucket(key, object)
 
     if (object === undefined) {
       return null
@@ -75,7 +75,7 @@ function HashMap () {
   }
 
   function clear () {
-    buckets = new Array(capacity).fill([])
+    buckets = new Array(capacity).fill(null).map(() => [])
   }
 
   const _findObjectInBucket = (key, index) => buckets[index].filter(obj => obj.key === key).at(0)
@@ -107,4 +107,4 @@ data.set('yui', 'awesome')
 data.set('dsgat', 'awesome')
 data.set('jhg', 'awesome')
 data.set('thing', 'new')
-console.log(data.entries());
+console.log(data.entries())
