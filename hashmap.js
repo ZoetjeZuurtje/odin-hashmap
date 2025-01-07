@@ -109,14 +109,14 @@ function HashMap () {
   const entries = () => _entries().map(obj => [obj.key, obj.value])
   const values = () => _entries().map(obj => obj.value)
   const keys = () => _entries().map(obj => obj.key)
-  const length = () => _length
+  const size = () => _length
 
   return {
     get,
     set,
     has,
     remove,
-    length,
+    size,
     clear,
     entries,
     values,
@@ -129,4 +129,4 @@ for (let i = 0; i < 1e6; i++) {
   const key = Math.floor(Math.random() * 1e6).toString()
   data.set(key, 'value')
 }
-console.log(data.length(), data.entries().length)
+console.log(data.size())
