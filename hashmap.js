@@ -1,5 +1,9 @@
+// Todo:
+// Figure out why performance grinds to a halt after adding ~6M elements. Possible memory leak?
+// Check if `has |= 0` is really necessary for the hash function
+
 function HashMap () {
-  const MAX_LOAD_FACTOR = 0.8
+  const MAX_LOAD_FACTOR = 0.75
   let capacity = 16
   let buckets = new Array(capacity).fill(null).map(() => [])
   let _length = 0
@@ -18,8 +22,6 @@ function HashMap () {
   }
 
   function set (key, value) {
-    manageCapacity()
-    
     const index = hash(key)
 
     if (index < 0 || index >= buckets.length) {
@@ -33,6 +35,7 @@ function HashMap () {
     buckets[index].push({ key, value })
 
     _length++
+    manageCapacity()
   }
 
   function get (key) {
@@ -78,6 +81,7 @@ function HashMap () {
 
   function clear () {
     _length = 0
+    buckets = null
     buckets = new Array(capacity).fill(null).map(() => [])
   }
 
@@ -88,19 +92,17 @@ function HashMap () {
   }
 
   function isOverloaded () {
-    return capacity * MAX_LOAD_FACTOR < _length 
+    return capacity * MAX_LOAD_FACTOR < _length
   }
 
   function increaseCapacity () {
     capacity = capacity * 2
-    let objects = _entries().map(obj => {
-      let entries = Object.entries(obj)
-      return [entries[0][1], entries[1][1]]
-    });
+    const objects = _entries()
+
     clear()
 
     for (let i = 0; i < objects.length; i++) {
-      set(objects[i][0], objects[i][1])
+      set(objects[i].key, objects[i].value)
     }
   }
 
@@ -123,10 +125,3 @@ function HashMap () {
     keys
   }
 }
-
-const data = HashMap()
-for (let i = 0; i < 1e6; i++) {
-  const key = Math.floor(Math.random() * 1e6).toString()
-  data.set(key, 'value')
-}
-console.log(data.size())
